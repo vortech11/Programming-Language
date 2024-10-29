@@ -1,3 +1,3 @@
-x = 3
-print(x)
+john = 3
+print(john)
 

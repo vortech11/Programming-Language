@@ -2,32 +2,37 @@ extension = ".what"
 name = "file"
 
 with open(name+extension, "r") as file:
-    lineTokens = [[""]]
-    programLine = 0
+    lineTokens = [""]
     for line in file.readlines():
         for character in line:
             match character:
                 case " ":
-                    lineTokens[programLine].append("")
+                    if lineTokens[-1] != "": lineTokens.append("")
                 case ".":
-                    lineTokens[programLine].append(".")
-                    lineTokens.append([""])
-                    programLine += 1
+                    if lineTokens[-1] != "": lineTokens.append("")
                 case "\n":
                     pass
                 case _:
-                    lineTokens[programLine][-1] += character
+                    lineTokens[-1] += character
 
-
+print(lineTokens)
 
 
 open(name+".py", "w").close()
 with open(name+".py", "a") as file:
-    for line in lineTokens:
-        if line[0] == "": pass
-        
-        elif line[0] == "print": file.write("print(" + line[1] + ")")
+    token = 0
+    while token < len(lineTokens):
 
-        elif line[1] == "=": file.write(line[0] + " = " + line[2])
+        if lineTokens[token] == "": token += 1
+        
+        elif lineTokens[token] == "print": 
+            file.write("print(" + lineTokens[token + 1] + ")")
+            token += 2
+
+        elif lineTokens[token + 1] == "=": 
+            file.write(lineTokens[token] + " = " + lineTokens[token + 2])
+            token += 3
+        
+        else: token += 1
 
         file.write("\n")
